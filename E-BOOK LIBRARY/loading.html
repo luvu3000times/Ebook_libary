@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirect To E-BOOK LIBRARY</title>
+    <link type="image/png" sizes="16x16" rel="icon" href="/ebook.png">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color:white;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .message{
+            color: black;
+        }
+        .loader {
+            position: relative;
+            width: 50px;
+            height: 50px;
+        }
+        .loader:before {
+            -webkit-animation: spin 0.5s infinite linear;
+            animation: spin 0.5s infinite linear;
+            border-radius: 100%;
+            border-top: 6px solid var(--primary, black);
+            content: '';
+            display: block;
+            height: 50px;
+            width: 50px;
+            margin: 0 auto;
+        }
+        @-webkit-keyframes spin {
+            to {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes spin {
+            to {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+        .message {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+    <script>
+       
+        setTimeout(function () {
+            window.location.href = "/book detials.html"
+        }, 4000);
+    </script>
+</head>
+<body>
+    <div class="loader"></div> <br>
+    <div class="message">
+    </div>
+</body>
+</html>

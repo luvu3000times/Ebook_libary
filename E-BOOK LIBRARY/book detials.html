@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Book Library</title>
+    <link type="image/png" sizes="16x16" rel="icon" href="/ebook.png">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --background-color: #ecf0f1;
+            --card-color: #ffffff;
+            --text-color: #333333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: var(--card-color);
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .title-container {
+            flex-grow: 1;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .search-container {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.5rem 2rem 0.5rem 0.75rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--card-color);
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .search-input:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1rem;
+            height: 1rem;
+            fill: var(--card-color);
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .book-card {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .book-info {
+            padding: 1.5rem;
+        }
+
+        .book-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--secondary-color);
+        }
+
+        .book-author {
+            font-size: 1rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .book-category {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: var(--card-color);
+            font-size: 0.8rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 15px;
+            text-decoration: none;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .book-category:hover {
+            background-color: #c0392b;
+        }
+
+        .no-results {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            margin-top: 2rem;
+            font-weight: bold;
+        }
+        .COPY1{
+            text-align: center;
+            justify-content: center;
+        }
+        .COPY{
+             text-align: center;
+            justify-content: center;
+        }
+
+        hr{
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .title-container {
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+
+            .search-container {
+                width: 100%;
+            }
+
+            .book-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            .subtitle {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .book-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .book-card {
+                max-width: 300px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="title-container">
+                <h1> E-Book Library</h1>
+                <p class="subtitle">Your gateway to Computer Science and Engineering knowledge</p>
+            </div>
+            <div class="search-container">
+                <input type="text" id="search" class="search-input" placeholder="Search for books..." aria-label="Search for books">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div id="book-grid" class="book-grid">
+        </div>
+    </main>
+
+    <script>
+        const books = [
+            {
+                title: "104 SYLLABUS",
+                author: " ANNA UNIVERSITY",
+                year:"DEPARTMENT OF CSE",
+                category: "DOWNLOAD NOW",
+                downloadLink: "https://drive.google.com/file/d/19cAauKyc7NufOdxzwxKANgCJqnvBVONh/view?usp=drivesdk"
+            },
+            {
+                title: "HS3151 PROFFESTIONAL ENGLISH-I",
+                author: "TECHNICAL PUBLICATION",
+                year:"YEAR/SEM:I/I",
+                category: "COMING SOON",
+                downloadLink: " "
+            },
+            {
+                title:"MA3141 MATRICES AND CALCULUS",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:I/I",
+                category:"COMING SOON",
+                downloadLink: " "
+            },
+            {
+                title:"PH3151 ENGINEERING PHYSICS",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:I/I",
+                category:"COMING SOON",
+                downloadLink: " "
+            },
+            {
+                title:"CY3151 ENGINEERING CHEMISTRY",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:I/I",
+                category:"COMING SOON",
+                downloadLink: " "
+            },
+            {
+                title:"GE3151 PROBLEM SOLVING AND PYTHON PROGRAMING",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:I/I",
+                category:"COMING SOON",
+                downloadLink: " "
+            },
+            {
+                title:"GE3152 HERITAGES OF TAMIL",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:I/I",
+                category:"DOWNLOAD NOW",
+                downloadLink: "https://drive.google.com/file/d/19el38g5fdIMIEz6dppXuAYRphWZTLkkw/view?usp=drivesdk"
+            },
+            {
+                title:"HS3252 PROFFESTIONAL ENGLISH-II",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:I/II",
+                category:"COMING SOON",
+                downloadLink: " "
+            },
+            {
+                title:"MA3251 STATISTICS AND NUMERICAL METHODS",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:I/II",
+                category:"COMING SOON",
+                downloadLink: " "
+            },
+            {
+                title:"PH3256 PHYSICS FOR INFORMATION SCIENCE",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:I/II",
+                category:"COMING SOON",
+                downloadLink: " "
+            },
+            {
+                title:"GE3251 ENGINEERING GRAPHICS",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:I/II",
+                category:"COMING SOON",
+                downloadLink: " "
+            },
+            {
+                title:"BE3251 BASIC ELECTRICAL AND ELECTRONICS ENGINEERING",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:I/II",
+                category:"COMING SOON",
+                downloadLink: " "
+            },
+            {
+                title:"CS3251 PROGRAMING IN C",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:I/II",
+                category:"COMING SOON",
+                downloadLink: " "
+            },
+            {
+                title:"GE3252 TAMILS AND TECHNOLOGIES",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:I/II",
+                category:"COMING SOON",
+                downloadLink: " "
+            },
+            {
+                title:"MA3354 DISCRETE MATHEMATICS",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:II/III",
+                category:"COMING SOON",
+                downloadLink: " "
+            },
+            {
+                title:"CS3351 DIGITAL PRINCIPAL AND COMPUTER ORGANIZATION",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:II/III",
+                category:"COMING SOON",
+                downloadLink: " "
+            },
+            {
+                title:"CS3352 FOUNDATION OF DATA SCIENCE",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:II/III",
+                category:"DOWNLOAD NOW",
+                downloadLink: "https://drive.google.com/file/d/1HnHvdmQQUO6VLMXIp-0wycohxSYTfqrn/view?usp=drivesdk"
+            },
+            {
+                title:"CS3301 DATA STRUCTURE",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:II/III",
+                category:"COMING SOON",
+                downloadLink: " "
+            },
+            {
+                title:"CS3391 OBJECT ORIENTED PROGRAMING",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:II/III",
+                category:"DOWNLOAD NOW",
+                downloadLink: "https://drive.google.com/file/d/1WBUWtkgfxG1zL7ulr8sLXiMiTlfwaIld/view?usp=drivesdk"
+            },
+            {
+                title:"CS3452 THEORY OF COMPUTATION",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:II/IV",
+                category:"DOWNLOAD NOW",
+                downloadLink: "https://drive.google.com/file/d/1ANXHYFQ-lpYmMtwqC3Ei7azEelxAGNxx/view?usp=drivesdk"
+            },
+            {
+                title:"CS3491 ARTIFICIAL INTELEGENCE AND MACHINE LEARNING",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:II/IV",
+                category:"DOWNLOAD NOW",
+                downloadLink: "https://drive.google.com/drive/folders/1ASuHu-a8ofxKIb84shSxF4G2v-8obzXe"
+            },
+            {
+                title:"CS3492 DATABASE MANAGEMENT SYSTEM",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:II/IV",
+                category:"DOWNLOAD NOW",
+                downloadLink: "https://drive.google.com/file/d/1APhf-EsATZ-bwnJaI5MJzDw2cNV5wzz8/view?usp=drivesdk"
+            },
+            {
+                title:"CS3401 ALGORITHNS",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:II/IV",
+                category:"COMING SOON",
+                downloadLink: " "
+            },
+            {
+                title:"CS3451 INTRODUCTION TO OPERATING SYSTEM",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:II/IV",
+                category:"DOWNLOAD NOW",
+                downloadLink: "https://drive.google.com/file/d/1EG3ADfaGbgpRKl4WK5zaScBurB-k7yPY/view?usp=drivesdk"
+            },
+            {
+                title:"GE3451 ENVIRONMENTAL SCIENCEAND SUSTINABILITY",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:II/IV",
+                category:"DOWNLOAD NOW",
+                downloadLink: "https://drive.google.com/file/d/1rNQs-hAb065S76CmLpdZEpEfa-nE8eIy/view?usp=drivesdk"
+            },
+            {
+                title:"CS3551 DISTRIBUTED COMPUTING",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:III/V",
+                category:"DOWNLOAD NOW",
+                downloadLink: "https://drive.google.com/file/d/105wqj3jXyk_W3yvMRhtwYQ75e98xUoFK/view?usp=drivesdk"
+            },
+            {
+                title:"CS3501 COMPILER DESIGN",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:III/V",
+                category:"DOWNLOAD NOW",
+                downloadLink: "https://drive.google.com/file/d/1-r696xf_4tj96y-XvFPtX0y2pBYr-LiH/view?usp=drivesdk"
+            },
+            {
+                title:"CS3591 COMPUTER NETWORKS",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:III/V",
+                category:"DOWNLOAD NOW",
+                downloadLink: "https://drive.google.com/file/d/1-tJULHT3EVG4RH7lDujKz1uCrzSdKwhS/view?usp=drivesdk"
+            },
+            {
+                title:"CB3491 CRYPTOGRAPHY AND CYBERSECURITY",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:III/V",
+                category:"DOWNLOAD NOW",
+                downloadLink: "https://drive.google.com/file/d/10LA3fQ-Jlblx3k_YTwjskfmAgiIiJjP_/view?usp=drivesdk"
+            },
+            {
+                title:"CCS334 BIG DATA ANALYTICS",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:III/V",
+                category:"DOWNLOAD NOW",
+                downloadLink: "https://drive.google.com/file/d/102RJYp5o_xCRXni9v-UQ25kJYIwt-qbS/view?usp=drivesdk"
+            },
+            {
+                title:"CCS375 WEB TECHNOLOGIES",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:III/V",
+                category:"DOWNLOAD NOW",
+                downloadLink: "https://drive.google.com/file/d/1-jpc2JzWR43nqNjo80xeLL6e-VUMVTj_/view?usp=drivesdk"
+            },
+            {
+                title:"CCS356 OBJECT ORIENTED SOFTWARE ENGINEERING",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:IV/VI",
+                category:"DOWNLOAD NOW",
+                downloadLink: "https://drive.google.com/drive/folders/1CriMQeM55wS_GoHK2LsjBY0vCTS_ruzU"
+            },
+            {
+                title:"CS3691 EMBEDDED SYSTEM AND IoT",
+                author:"TECHNICAL PUBLICATION" ,
+                year:"YEAR/SEM:IV/VI",
+                category:"DOWNLOAD NOW",
+                downloadLink: "https://drive.google.com/drive/folders/1ArA6W-2jlalwF-vp9Y7iGu8E52otpo15"
+            },
+            {
+                title:"GE3791 HUMAN VALUES AND ETHICS",
+                author:"TECHNICAL PUBLICATION" ,
+                year:" YEAR/SEM:IV/VII",
+                category:"DOWNLOAD NOW",
+                downloadLink: "https://drive.google.com/file/d/1VmjSMvY-SXO8KvY0IK2yiUje8O5pWdWv/view?usp=drivesdk"
+            }
+        ];
+
+        function createBookCard(book) {
+            return `
+                <article class="book-card">
+                    <div class="book-info">
+                        <h2 class="book-title">${book.title}</h2>
+                        <p class="book-author">${book.author}</p>
+                        <p class="book-author">${book.year}</p>
+                        <a href="${book.downloadLink}" class="book-category" download>${book.category}</a>
+                    </div>
+                </article>
+            `;
+        }
+
+        function renderBooks(booksToRender) {
+            const bookGrid = document.getElementById('book-grid');
+            
+            if (booksToRender.length === 0) {
+                bookGrid.innerHTML = `<p class="no-results">No results found</p>`;
+            } else {
+                bookGrid.innerHTML = booksToRender.map(createBookCard).join('');
+            }
+        }
+
+        function filterBooks(searchTerm) {
+            return books.filter(book => 
+                book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                book.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                book.category.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderBooks(books);
+
+            const searchInput = document.getElementById('search');
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value;
+                const filteredBooks = filterBooks(searchTerm);
+                renderBooks(filteredBooks);
+            });
+        });
+    </script>
+
+<hr>
+
+<h3 class="COPY">© [2025] [NAVEENKUMAR/ E-BOOK LIBRARY]</h3>
+<p class="COPY1">All rights reserved. No part of this eBook library, including the content, images, or designs, may be reproduced, distributed, or transmitted in any form or by any means without the prior written permission of the copyright holder. Unauthorized use, duplication, or distribution is prohibited by law.</p>
+</body>
+</html>

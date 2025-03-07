@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-BOOK LIBRARY</title>
+    <link type="image/png" sizes="16x16" rel="icon" href="/ebook.png">
+
+    <style>
+        *{
+            overflow: hidden;
+        }
+        body {
+            background-image: url(/work6.jpg);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            color: black;
+            height: 100vh;
+            width: 100%;
+            margin: 0;
+        }
+        div {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-top: 6%;
+        }
+        
+        #color{
+            color: navy;
+        }
+        a {
+            text-decoration: none;
+            color: white;
+        }
+        .container1 {
+            background-color: navy;
+            color: white;
+            box-shadow: none;
+            border: none;
+            height: 40px;
+            width: 70px;
+            border-radius: 20px;
+        }
+        input {
+            border: none;
+            border-radius: 5px;
+            padding: 1%;
+            width: 15%;
+        }
+        button {
+            cursor: pointer;
+        }
+        #help{
+            background-color: navy;
+            width: 6%;
+            padding: 1%;
+            border-radius: 25px;
+            text-align: center;
+            margin-left: 90%;
+        }
+
+        .help{
+            text-decoration: none;
+        }
+
+        @media screen and (max-width: 768px) {
+            body {
+                background-size: cover;
+                background-attachment: fixed; 
+            }
+            div {
+                padding-top: 15%;
+            }
+            input {
+                width: 50%;
+            }
+            .container1 {
+                height: 30px;
+                width: 50px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            body {
+                background-size: cover;
+                background-attachment: fixed; 
+            }
+            div {
+                padding-top: 10%;
+            }
+            input {
+                width: 70%;
+            }
+            .container1 {
+                height: 30px;
+                width: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>WELCOME! </h1>
+        <b><p>First, Understand the problem, Then Think How To Solve the problem!</p></b><br>
+        <div id="login-form">
+            <input type="text" placeholder="Enter Your Name" id="name"> <br> <br>
+            <input type="email" placeholder="Enter Your Email" id="email"> <br> <br>
+            <input type="password" placeholder="Enter Your Password" id="password"><br> <br>
+            <button class="container1" aria-required="true" onclick="handleLogin()">Log in</button>
+            <p id="error-message" style="color: red; display: none;"></p>
+            <p>Don't have an account? <a id="color"  href="javascript:void(0)" onclick="showRegisterForm()">Register</a></p>
+            <h4 id="help"><a class="help" href="/help.html">HELP ?</a></h4>
+        </div>
+
+        <div id="register-form" style="display: none;">
+            <h2>Register</h2>
+            <input type="text" placeholder="Enter Your Name" id="register-name"><br><br>
+            <input type="email" placeholder="Enter Your Email" id="register-email"><br><br>
+            <input type="password" placeholder="Enter Your Password" id="register-password"><br><br>
+            <button class="container1" aria-required="true" onclick="handleRegister()">Register</button>
+            <p id="register-error-message" style="color: red; display: none;"></p>
+            <p>Already have an account? <a id="color" href="javascript:void(0)" onclick="showLoginForm()">Login</a></p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        function showLoginForm() {
+            document.getElementById("login-form").style.display = "block";
+            document.getElementById("register-form").style.display = "none";
+        }
+
+       function showRegisterForm() {
+            document.getElementById("login-form").style.display = "none";
+            document.getElementById("register-form").style.display = "block";
+        } 
+
+        function handleLogin() {
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+            var storedEmail = localStorage.getItem("email");
+            var storedPassword = localStorage.getItem("password");
+            var errorMessage = document.getElementById("error-message");
+
+            if (email === storedEmail && password === storedPassword) {
+                localStorage.setItem('isLoggedIn', 'true');
+                window.location.href = "loading.html"; 
+            } else {
+                errorMessage.textContent = "Invalid email or password. Please try again.";
+                errorMessage.style.display = "block";
+            }
+        }
+
+        function handleRegister() {
+            var name = document.getElementById("register-name").value;
+            var email = document.getElementById("register-email").value;
+            var password = document.getElementById("register-password").value;
+            var errorMessage = document.getElementById("register-error-message");
+
+            if (!name || !email || !password) {
+                errorMessage.textContent = "Please fill out all fields.";
+                errorMessage.style.display = "block";
+                return;
+            }
+
+            localStorage.setItem("name", name);
+            localStorage.setItem("email", email);
+            localStorage.setItem("password", password);
+            alert("Registration successful! You can now log in.");
+            showLoginForm(); 
+        }
+    </script>
+</body>
+</html>
